@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Note · Ghi chú nhanh" />
+<meta property="og:description" content="Ghi chú tức thời, không cần đăng nhập" />
+<meta property="og:image" content="https://i.imgur.com/LgH7rtS.png" />
+<meta property="og:type" content="website" />
+<link href="https://i.imgur.com/LgH7rtS.png" rel="icon" type="image/x-icon" />
+<title>Note · Ghi chú nhanh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF3F0; --surface:#FFFFFF; --ink:#3A2A2E; --muted:#9C8388;
+    --accent:#E2657B; --accent-soft:#F6D9DF; --line:#EFD9DD; --gutter:#C98E9B;
+    --shadow: 0 24px 60px -28px rgba(58,42,46,.4);
+  }
+  html[data-theme="blue"]{
+    --bg:#EEF3F8; --surface:#FFFFFF; --ink:#1F2D3D; --muted:#7D93A8;
+    --accent:#3B6FA0; --accent-soft:#D6E4F0; --line:#DCE6EF; --gutter:#7FA0C0;
+    --shadow: 0 24px 60px -28px rgba(31,45,61,.4);
+  }
+  html[data-theme="black"]{
+    --bg:#15151A; --surface:#1D1D24; --ink:#ECE9E6; --muted:#7A7A85;
+    --accent:#E0B454; --accent-soft:#2C2A22; --line:#2B2B33; --gutter:#5C5C68;
+    --shadow: 0 24px 60px -28px rgba(0,0,0,.65);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--bg);
+    font-family:'Inter',sans-serif; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px; transition: background .35s ease, color .35s ease;
+  }
+  .themes{
+    position:fixed; top:20px; right:20px; display:flex; gap:7px; padding:5px;
+    background:var(--surface); border-radius:99px; box-shadow:var(--shadow);
+  }
+  .themes button{
+    width:22px; height:22px; border-radius:50%; border:2px solid transparent; cursor:pointer;
+    padding:0; transition: transform .15s ease, border-color .15s ease;
+  }
+  .themes button:hover{ transform:scale(1.12); }
+  .themes button[data-t="pink"]{ background:#E2657B; }
+  .themes button[data-t="blue"]{ background:#3B6FA0; }
+  .themes button[data-t="black"]{ background:#15151A; border-color:#3a3a42; }
+  .themes button.active{ border-color: var(--ink); }
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:22px;
+    box-shadow:var(--shadow); padding:46px 40px; max-width:420px; width:100%;
+    text-align:center;
+  }
+  .mark{
+    width:46px; height:46px; margin:0 auto 22px; border-radius:50%;
+    background:var(--accent-soft); display:flex; align-items:center; justify-content:center;
+  }
+  .mark span{
+    width:14px; height:14px; border-radius:50%; background:var(--accent);
+  }
+  h1{
+    font-family:'Fraunces',serif; font-weight:600; font-size:30px; margin:0 0 10px;
+    letter-spacing:.2px;
+  }
+  p.sub{
+    color:var(--muted); font-size:14.5px; line-height:1.6; margin:0 0 30px;
+  }
+  .cta{
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:var(--accent); color:#fff; font-weight:600; font-size:14.5px;
+    padding:13px 26px; border-radius:99px; transition: filter .15s ease, transform .15s ease;
+  }
+  .cta:hover{ filter:brightness(1.07); transform:translateY(-1px); }
+  .endpoint{
+    margin-top:26px; font-family:'JetBrains Mono',monospace; font-size:11.5px;
+    color:var(--muted); background:var(--accent-soft); display:inline-block;
+    padding:7px 12px; border-radius:8px;
+  }
+</style>
+</head>
+<body>
+  <div class="themes" id="themes">
+    <button data-t="pink" title="Hồng"></button>
+    <button data-t="blue" title="Xanh"></button>
+    <button data-t="black" title="Đen"></button>
+  </div>
+
+  <div class="card">
+    <div class="mark"><span></span></div>
+    <h1>Note</h1>
+    <p class="sub">Ghi chú tức thời, không cần đăng nhập. Mỗi ghi chú có một liên kết riêng và tự động lưu khi bạn gõ.</p>
+    <a class="cta" href="/note/:UUID">Tạo ghi chú mới →</a>
+    <div class="endpoint">GET · PUT /note/:UUID</div>
+  </div>
+
+<script>
+(function(){
+  const saved = localStorage.getItem('note-theme') || 'pink';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.querySelectorAll('#themes button').forEach(b => {
+    if (b.dataset.t === saved) b.classList.add('active');
+    b.addEventListener('click', () => {
+      document.documentElement.setAttribute('data-theme', b.dataset.t);
+      localStorage.setItem('note-theme', b.dataset.t);
+      document.querySelectorAll('#themes button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
